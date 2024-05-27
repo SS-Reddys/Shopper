@@ -6,14 +6,26 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-require('dotenv').config();
+const dotenv = require("dotenv");
+
+// Specify the path to the .env file
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
 
 app.use(express.json());
 app.use(cors());
 
-// const dbURI = process.env.MONGODB_URI;
-// mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
- mongoose.connect("mongodb+srv://sujithreddysudini:Sujithreddy2k1@cluster0.sewxhkp.mongodb.net/e-commerce");
+const dbURI = process.env.MONGODB_URI;
+
+console.log("MongoDB URI: ", dbURI); // Log the MongoDB URI to check if it's loaded
+
+if (!dbURI) {
+    console.error('MONGODB_URI is not defined. Please check your .env file.');
+    process.exit(1); // Exit the application if the URI is not defined
+}
+
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 app.get("/",(req,res)=>{
     res.send("Express App is Running");
